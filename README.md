@@ -1,4 +1,4 @@
-ESP32とws1850sモジュール(https://www.switch-science.com/products/8301?srsltid=AfmBOorMixVNIWm1sMiKO3c1PTqjwFZWl9X0G_-vU2aMKctOxQ9IA6PN)によってNFCタグを読み取るプログラムです。
+ESP32とws1850sモジュール( https://www.switch-science.com/products/8301?srsltid=AfmBOorMixVNIWm1sMiKO3c1PTqjwFZWl9X0G_-vU2aMKctOxQ9IA6PN ) によってNFCタグを読み取るプログラムです。
 
 
 MFRCオブジェクトのコンストラクタの第1引数には0x28を与えます。

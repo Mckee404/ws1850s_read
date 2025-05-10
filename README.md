@@ -10,4 +10,7 @@ MFRCオブジェクトのコンストラクタの第1引数には0x28を与え�
 
 
 参考
+
 https://sample.msr-r.net/m5stack-rfid2unit/
+
+https://stackoverflow.com/questions/22808594/arduino-rfid-rc522-stop-reading-card-multiple-times

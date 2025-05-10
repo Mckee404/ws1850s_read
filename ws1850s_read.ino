@@ -1,6 +1,11 @@
 #include "MFRC522_I2C.h"
 
-MFRC522 mfrc522(0x28,0);
+MFRC522 mfrc522(0x28, 255);
+
+// リーダーにかざされたタグが読み取り済みかを表すフラグ
+// false : 読み取り後
+// true  : 読み取り前
+bool rfid_scanned = false;
 
 void setup() {
   Wire.begin();
@@ -10,14 +15,26 @@ void setup() {
 }
 
 void loop() {
-  if(!mfrc522.PICC_IsNewCardPresent() || !mfrc522.PICC_ReadCardSerial()) {
-    delay(200);
-    return;
+  if (hasCard() && rfid_scanned == false) {
+    for (byte i = 0; i < mfrc522.uid.size; i++) {
+      Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+      Serial.print(mfrc522.uid.uidByte[i], HEX);
+    }
+    Serial.println();
+    rfid_scanned = true;
+  } else if (!hasCard()) {
+    // カードがリーダーから離れたらフラグを下げる
+    rfid_scanned = false;
   }
-  for (byte i=0; i<mfrc522.uid.size; i++) {
-    Serial.print(mfrc522.uid.uidByte[i]<0x10?" 0":" ");
-    Serial.print(mfrc522.uid.uidByte[i],HEX);
+}
+
+bool hasCard() {
+  // NFCリーダの使用上、リーダーにタグを置きっぱなしにするとmfrc522.PICC_ReadCardSerial()がtrueとfalseを互い違いに返す
+  // したがって2回連続で読み取って、タグがリーダーから離れたかを検証する
+  for (int i = 0; i < 2; i++) {
+    if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+      return true;
+    }
   }
-  Serial.println();
-  delay(500);
+  return false;
 }
